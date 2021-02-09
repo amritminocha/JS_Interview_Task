@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .input {
+            width: 90px;
+            margin: 0 10
+        }
+
+        .buttonContainer {
+            text-align: center
+        }
+
+        .beginButton {
+            text-align: center;
+        }
+
+        #contentContainer {
+            display: none
+        }
+
+        
+    </style>
+</head>
+
+<body>
+    <div class="buttonContainer">
+        <h3>Name: Amrit Minocha / minochaamrit@gmail.com</h3>
+        <button id="startButton" class="startButton">Start Game</button>
+        <div id = "mainContent">
+            <div class="buttonContainer" id="contentContainer">
+                <h5>Enter 5 Petrol Pumps<h5>
+                        <input id="input1" class="input" placeholder="Position 1" />
+                        <input id="input2" class="input" placeholder="Position 2" />
+                        <input id="input3" class="input" placeholder="Position 3" />
+                        <input id="input4" class="input" placeholder="Position 4" />
+                        <input id="input5" class="input" placeholder="Position 5" />
+                        <br /><br /><br />
+                        <button id="begin" class="beginButton">Begin</button>
+            </div>
+            <div id="result">
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var start = document.getElementById('startButton');
+        var begin = document.getElementById('begin');
+        var content = document.getElementById('contentContainer');
+        var result = document.getElementById('result');
+        var main = document.getElementById('mainContent');
+        var count = 0;
+        var petrol = [];
+        start.addEventListener('click', () => {
+            if (count % 2 === 0) {
+                console.log('click');
+                content.style.display = 'block';
+                start.innerHTML = 'Reset Game';
+            } else {
+                console.log('reset');
+                content.style.display = 'none';
+                start.innerHTML = "Start Game";
+                result.innerHTML="";
+                begin.removeAttribute("disabled")
+                for(var i=1;i<=5;i++){
+                    petrol=[]
+                    document.getElementById(`input${i}`).value=''
+                }
+            }
+            count++;
+        })
+
+        begin.addEventListener('click', () => {
+            begin.setAttribute("disabled","disabled")
+            for (var i = 0; i < 5; i++) {
+                petrol.push(parseInt(document.getElementById(`input${i + 1}`).value));
+            }
+            // begin.style.display = 'block';
+            console.log(petrol)
+            beginGame(petrol);
+        })
+        function beginGame(fuel) {
+            var distance = 0;
+            var totalFuel = 30;
+            var move = 1;
+
+            while (distance < 100 && totalFuel > 0) {
+                var random = Math.floor(Math.random() * 6) ;
+                distance += random
+                if (fuel.indexOf(distance) !== -1) {
+                    totalFuel += 20;
+                }
+                totalFuel -= random;
+                if (totalFuel < 0) {
+                    break;
+                }
+                function close(move, distance, totalFuel) {
+                    setTimeout(() => {
+                        var h4 = document.createElement('h4')
+                        h4.textContent = `Move ${move} - Car at ${distance} and Petrol remaining is ${totalFuel}`
+                        result.appendChild(h4)
+                    }, move * 300)
+                }
+                close(move, distance, totalFuel)
+                move++;
+                console.log(`distance is ${distance} and fule left is ${totalFuel}`)
+            }
+            if(distance>=100){
+                var h5 = document.createElement('h4')
+                h5.textContent = ' Reached ;)'
+                setTimeout(()=>{
+                    result.appendChild(h5)
+                },move*300);
+            } else{
+                var h5 = document.createElement('h4')
+                h5.textContent = 'Game over :('
+                setTimeout(()=>{
+                    result.appendChild(h5)
+                },move*300);
+                
+            }
+
+
+        }
+    </script>
+</body>
+
+</html>
